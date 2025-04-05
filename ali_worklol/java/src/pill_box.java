@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.lang.Math;
 import java.time.LocalDate;
@@ -219,7 +220,6 @@ public class pill_box {
       try{
          // use postgres JDBC driver.
          Class.forName ("org.postgresql.Driver").newInstance ();
-         // instantiate the PizzaStore object and creates a physical
          // connection.
          String connectionString = args[0];
          String user = args[1];
@@ -264,7 +264,27 @@ public class pill_box {
         return;
     }
    }
-    // UpdateStatus function
+   public void markDoseAsTaken() {
+      try {
+        String matchQuery = String.format("SELECT dose_time FROM adherence WHERE date = CURRENT_DATE AND STATUS = 'Missed';");
+        List<List<String>> result = executeQueryAndReturnResult(matchQuery);
+        if (result.isEmpty()) {
+            System.out.println("No valid dose found to mark as taken.");
+            return;
+        }
+
+        String doseTime = result.get(0).get(0);
+
+        String update = String.format("UPDATE adherence SET open_time = CURRENT_TIMESTAMP " + 
+        "status = 'Taken' WHERE date = CURRENT_DATE AND dose_time = '%s';", doseTime);
+        executeUpdate(update);
+        System.out.println("Dose at " + doseTime + " marked as TAKEN");
+
+   } catch (Exception e) {
+      System.err.println("markDoseAsTaken error: " + e.getMessage());
+   }
+}
 
 }
+
 
