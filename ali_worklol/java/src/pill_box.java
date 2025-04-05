@@ -26,18 +26,17 @@ public class pill_box {
 
    /**
     *
-    * @param hostname the MySQL or PostgreSQL server hostname
-    * @param database the name of the database
+    * @param connectionString the postgres connection string
     * @param username the user name used to login to the database
     * @param password the user login password
     * @throws java.sql.SQLException when failed to make a connection.
     */
-   public pill_box(String dbname, String dbport, String user, String passwd) throws SQLException {
+   public pill_box(String connectionString, String user, String passwd) throws SQLException {
 
       System.out.print("Connecting to database...");
       try{
          // constructs the connection URL
-         String url = "jdbc:postgresql://localhost:" + dbport + "/" + dbname;
+         String url = "jdbc:"+connectionString;
          System.out.println ("Connection URL: " + url + "\n");
 
          // obtain a physical connection
@@ -212,7 +211,7 @@ public class pill_box {
             "Usage: " +
             "java [-classpath <classpath>] " +
             pill_box.class.getName () +
-            " <dbname> <port> <user>");
+            " <connectionString> <user> <passwd>");
          return;
       }//end if
 
@@ -222,10 +221,10 @@ public class pill_box {
          Class.forName ("org.postgresql.Driver").newInstance ();
          // instantiate the PizzaStore object and creates a physical
          // connection.
-         String dbname = args[0];
-         String dbport = args[1];
-         String user = args[2];
-         esql = new pill_box (dbname, dbport, user, "");
+         String connectionString = args[0];
+         String user = args[1];
+         String passwd = args[2];
+         esql = new pill_box (connectionString, user, passwd);
          esql.loadAllDoses();
       }catch(Exception e) {
          System.err.println (e.getMessage ());
