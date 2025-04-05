@@ -11,7 +11,7 @@ public class SerialConnector {
             }
 
             pill_box db = new pill_box(args[0], args[1], args[2], "");
-            SerialPort comPort = SerialPort.getCommPort("COM3"); // idk
+            SerialPort comPort = SerialPort.getCommPort("/dev/cu.usbmodem101"); // idk
             comPort.setBaudRate(9600);
 
             if (comPort.openPort()) {

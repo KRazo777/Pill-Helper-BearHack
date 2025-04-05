@@ -9,12 +9,10 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.scanner;
-import com.fazecast.jSerialComm.*;
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.lang.Math;
 import java.time.LocalDate;
-import ComPortListener;
 
 
 public class pill_box {
@@ -269,14 +267,7 @@ public class pill_box {
    }
    public void markDoseAsTaken() {
       try {
-        String matchQuery = """
-            SELECT dose_time FROM adherence
-            WHERE date = CURRENT_DATE
-              AND status = 'Missed'
-              AND ABS(EXTRACT(EPOCH FROM (CURRENT_TIME - dose_time))) <= 900
-            LIMIT 1;
-        """;
-
+        String matchQuery = String.format("SELECT dose_time FROM adherence WHERE date = CURRENT_DATE AND STATUS = 'Missed';");
         List<List<String>> result = executeQueryAndReturnResult(matchQuery);
         if (result.isEmpty()) {
             System.out.println("No valid dose found to mark as taken.");
@@ -285,12 +276,8 @@ public class pill_box {
 
         String doseTime = result.get(0).get(0);
 
-        String update = String.format("""
-            UPDATE adherence
-            SET open_time = CURRENT_TIMESTAMP, status = 'Taken'
-            WHERE date = CURRENT_DATE AND dose_time = '%s';
-        """, doseTime);
-
+        String update = String.format("UPDATE adherence SET open_time = CURRENT_TIMESTAMP " + 
+        "status = 'Taken' WHERE date = CURRENT_DATE AND dose_time = '%s';", doseTime);
         executeUpdate(update);
         System.out.println("Dose at " + doseTime + " marked as TAKEN");
 
