@@ -33,39 +33,79 @@ public class MainWindow {
 
 
     private JPanel createLoginPanel() {
-        JPanel panel = new JPanel(null);
 
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.setBorder(BorderFactory.createEmptyBorder(150, 250, 250, 250));
+
+        // Logo
+
+        panel.add(Box.createVerticalGlue());
+        
+
+        ImageIcon icon = new ImageIcon("assets/LOGO.png");
+        Image scaledImage = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
+        JLabel imgLabel = new JLabel(scaledIcon);
+        panel.add(imgLabel);
+
+        panel.add(Box.createVerticalStrut(35));
+
+        // Username
         JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(50, 30, 80, 25);
+        userLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JTextField userTextField = new JTextField();
+        userTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        userTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         panel.add(userLabel);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(userTextField);
 
-        JTextField userField = new JTextField();
-        userField.setBounds(140, 30, 150, 25);
-        panel.add(userField);
+        panel.add(Box.createVerticalStrut(25));
 
+        // Username
         JLabel passLabel = new JLabel("Password:");
-        passLabel.setBounds(50, 70, 80, 25);
+        passLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPasswordField passTextField = new JPasswordField();
+        passTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        passTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         panel.add(passLabel);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(passTextField);
 
-        JPasswordField passField = new JPasswordField();
-        passField.setBounds(140, 70, 150, 25);
-        panel.add(passField);
+        JButton loginButton = new JButton("Login");
+        loginButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+        loginButton.setMaximumSize(new Dimension(100, 30));
 
-        JButton loginBtn = new JButton("Login");
-        loginBtn.setBounds(140, 110, 100, 30);
-        panel.add(loginBtn);
+        panel.add(Box.createVerticalStrut(15));
+        panel.add(loginButton);
 
-        loginBtn.addActionListener(e -> {
-            String user = userField.getText();
-            String pass = new String(passField.getPassword());
+        JLabel errorLabel = new JLabel("");
+        errorLabel.setForeground(Color.RED); // make it red
+        errorLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            if (user.equals("admin") && pass.equals("1234")) {
-                cardLayout.show(cardPanel, "main");
-            } else {
-                JOptionPane.showMessageDialog(window, "Invalid credentials.");
-            }
-        });
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(errorLabel);
 
+        panel.add(Box.createVerticalGlue());
+
+        // Action
+    loginButton.addActionListener(e -> {
+        String user = userTextField.getText();
+        String pass = new String(passTextField.getPassword());
+
+        if (user.equals("admin") && pass.equals("1234")) {
+            cardLayout.show(cardPanel, "main");
+        } else {
+            errorLabel.setText("Invalid credentials");
+        }
+    });
+    
         return panel;
     }
 }
