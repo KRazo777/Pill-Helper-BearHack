@@ -44,15 +44,22 @@ view-db:
 
 CONNECT_STRING = postgresql://localhost:$(DB_PORT)/$(DB_NAME)
 JAVA_DIR = ali_worklol/java
+SRC_DIR=$(JAVA_DIR)/src
+CLASS_DIR=$(JAVA_DIR)/classes
+LIB_JAR=$(JAVA_DIR)/lib
+CLASSPATH=$(CLASS_DIR):$(LIB_DIR)/*
 
 
 # MAKE COMMANDS FOR JAVA APP
 
 build:
-	javac -d $(JAVA_DIR)/classes $(JAVA_DIR)/src/pill_box.java
+	javac -cp "$(LIB_DIR)/*" -d $(CLASS_DIR) $(SRC_DIR)/*.java
 
-run: load-db
+run-db: load-db build
 	java -cp $(JAVA_DIR)/classes:$(JAVA_DIR)/lib/postgresql-42.7.5.jar pill_box \
 	$(CONNECT_STRING) $(DB_USER) $(DB_PASSWORD)
+
+run-gui: build
+	java -cp "$(CLASSPATH)" Launcher
 
 
