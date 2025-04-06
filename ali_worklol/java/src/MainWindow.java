@@ -2,11 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
 public class MainWindow {
     
     private JFrame window;
     private JPanel cardPanel;
     private CardLayout cardLayout;
+    private pill_box db = null;
 
     public MainWindow() {
         window = new JFrame();
@@ -15,8 +17,19 @@ public class MainWindow {
         window.setSize(800, 800);
         window.setLocationRelativeTo(null);
 
+        try {
+            Class.forName ("org.postgresql.Driver").newInstance();
+            db = new pill_box("postgresql://localhost:5432/pill-db", "psql", "psql");
+            db.loadAllDoses();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        } finally {
+            System.out.println("Connected to DB");
+        }
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
+
 
         // Create both panels
         JPanel loginPanel = createLoginPanel();
