@@ -5,13 +5,13 @@ public class SerialConnector {
     public static void main(String[] args) {
         try {
             // args = <dbname> <port> <user>
-            if (args.length != 3) {
-                System.out.println("Usage: java SerialConnector <dbname> <port> <user>");
-                return;
-            }
+            //if (args.length != 3) {
+                // System.out.println("Usage: java SerialConnector <dbname> <port> <user>");
+              //  return;
+            //}
 
-            pill_box db = new pill_box(args[0], args[1], args[2], "");
-            SerialPort comPort = SerialPort.getCommPort("/dev/cu.usbmodem101"); // idk
+            pill_box db = new pill_box("postgresql://localhost:5432/pill-db", "psql", "psql");
+            SerialPort comPort = SerialPort.getCommPort("/dev/ttyACM1"); // idk
             comPort.setBaudRate(9600);
 
             if (comPort.openPort()) {

@@ -40,6 +40,9 @@ reset-db: remove-db create-db
 view-db:
 	docker exec -it $(DB_CONTAINER) psql -U $(DB_USER) -d $(DB_NAME)
 
+run-query:
+	@docker exec -i pill-db psql -U psql -d pill-db < $(SQL_DIR)/queries.sql
+
 # =================================================
 
 CONNECT_STRING = postgresql://localhost:$(DB_PORT)/$(DB_NAME)

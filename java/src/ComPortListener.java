@@ -35,3 +35,26 @@ public class ComPortListener implements SerialPortDataListener {
         }
     }
    }
+
+
+
+   /*void setup() {
+  if (distance > 10 && !alreadySent) {
+    Serial.println("TAKEN");   
+    alreadySent = true;
+  }
+
+  if (distance <= 10) {
+    alreadySent = false;
+  }
+
+  delay(500);
+
+
+  void setup() {
+  Serial.begin(9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+}
+
+*/

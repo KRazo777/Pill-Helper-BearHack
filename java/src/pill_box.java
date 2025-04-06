@@ -266,7 +266,8 @@ public class pill_box {
    }
    public void markDoseAsTaken() {
       try {
-        String matchQuery = String.format("SELECT dose_time FROM adherence WHERE date = CURRENT_DATE AND STATUS = 'Missed';");
+         
+        String matchQuery = String.format("SELECT dose_time FROM adherence WHERE date = CURRENT_DATE AND STATUS = 'Missed' AND CURRENT_TIME BETWEEN (dose_time - INTERVAL '2 hours') AND (dose_time + INTERVAL '2 hours') ORDER BY ABS(EXTRACT(EPOCH FROM (CURRENT_TIME - dose_time))) LIMIT 1;");
         List<List<String>> result = executeQueryAndReturnResult(matchQuery);
         if (result.isEmpty()) {
             System.out.println("No valid dose found to mark as taken.");
@@ -275,8 +276,7 @@ public class pill_box {
 
         String doseTime = result.get(0).get(0);
 
-        String update = String.format("UPDATE adherence SET open_time = CURRENT_TIMESTAMP " + 
-        "status = 'Taken' WHERE date = CURRENT_DATE AND dose_time = '%s';", doseTime);
+        String update = String.format("UPDATE adherence SET open_time = CURRENT_TIMESTAMP, status = 'Taken' WHERE date = CURRENT_DATE AND dose_time = '%s';", doseTime);
         executeUpdate(update);
         System.out.println("Dose at " + doseTime + " marked as TAKEN");
 
